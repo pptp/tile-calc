@@ -35,7 +35,7 @@ export default class WallEditBars extends Component {
     const {select} = this.state;
 
     const form = (select === null || !bars.get(select)) ? '' :
-        <EditBarForm bar={bars.get(select)}
+        <EditBarForm data={bars.get(select)}
             actions={actions}
             wallIndex={wallIndex}
             barIndex={select} />

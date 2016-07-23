@@ -1,8 +1,7 @@
-require('../styles/components/slider.less');
+require('../../styles/components/slider.less');
 
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
-import { List } from 'immutable'
 import Slider from 'react-motion-slider'
 import Wall from './Wall'
 import WallAdd from './WallAdd'
@@ -35,8 +34,8 @@ export default class WallList extends Component {
       const { wallList } = this.props;
 
       zoom = wallList.reduce((zoom, wall) => {
-        const size = wall.get('size');
-        const currentZoom = Math.min(wallWidth / size.get('w'), wallHeight / size.get('h'));
+        const size = wall.size;
+        const currentZoom = Math.min(wallWidth / size.w, wallHeight / size.h);
         return zoom ? Math.min(zoom, currentZoom) : currentZoom;
       }, zoom);
 
@@ -55,11 +54,11 @@ export default class WallList extends Component {
   render() {
     const { wallList, currentWall, actions } = this.props;
 
-    console.log(wallList.toJS());
+    // console.log(wallList[0].size);
 
-    const lastWall = wallList.last();
-    const suggestWidth = lastWall ? lastWall.get('size').get('w') : 0
-    const suggestHeight = lastWall ? lastWall.get('size').get('h') : 0
+    const lastWall = wallList[wallList.length - 1];
+    const suggestWidth = lastWall ? lastWall.size.w : 0
+    const suggestHeight = lastWall ? lastWall.size.h : 0
 
     return <div className="">
       <Slider ref="slider" autoHeight={true} slidesToShow={3}>
@@ -88,6 +87,6 @@ export default class WallList extends Component {
 }
 
 WallList.propTypes = {
-  wallList: PropTypes.instanceOf(List),
+  wallList: PropTypes.array,
   currentWall: PropTypes.number
 }

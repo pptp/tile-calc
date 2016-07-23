@@ -1,22 +1,38 @@
-/*
-require('normalize.css/normalize.css');
-require('styles/App.css');
+import React, { Component, PropTypes } from 'react'
 
-import React from 'react';
+import WallList from "../components/list/WallList"
+import Editor from "../components/editor/Editor"
 
+import Paper from 'material-ui/Paper';
 
-// let yeomanImage = require('../images/yeoman.png');
-
-class AppComponent extends React.Component {
+export default class Main extends Component {
   render() {
-    return (
-      
-    );
+    const { wallList, currentWall, actions } = this.props;
+
+    const editStatement = (currentWall !== null) ?
+      <Editor 
+          wall={currentWall}
+          index={currentWall}
+          actions={actions} /> :
+      '';
+
+    // return <div className="wallListApp Main">
+    return <div className="index">
+      <Paper>
+        <WallList
+            actions={actions}
+            wallList={wallList}
+            currentWall={currentWall}>
+        </WallList>
+      </Paper>
+
+      {editStatement}
+    </div>
   }
 }
 
-AppComponent.defaultProps = {
-};
-
-export default AppComponent;
-*/
+Main.propTypes = {
+  wallList:    PropTypes.array.required,
+  currentWall: PropTypes.object.required,
+  actions:     PropTypes.array.required,
+}

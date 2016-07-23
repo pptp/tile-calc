@@ -1,16 +1,16 @@
-require('../styles/wall-edit.less');
+require('../../styles/wall-edit.less');
 
 import React, { PropTypes, Component } from 'react'
-import ReactDOM from 'react-dom'
-import { Map, List } from 'immutable';
+
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
 
-import WallEditGeneral from './WallEditGeneral'
-import WallEditBars from './WallEditBars'
+import TabEditWall from './TabEditWall'
 
-export default class WallEdit extends Component {
+
+export default class Editor extends Component {
   doCancelEdit() {
     this.props.actions.setToEditWall(null);
   }
@@ -19,20 +19,9 @@ export default class WallEdit extends Component {
     this.doCancelEdit();
   }
 
-  doGeneralEdit(wall) {
-    this.props.actions.editWall({
-      index: this.props.index,
-      wall: wall
-    });
-    // console.log("General Edit: ", wall, wall.get('size').get('w'));
-  }
-
-  doBarsAdd() {
-
-  }
-
   render() {
-    const bars = this.props.wall.get('bar') || List.of();
+    // const bars = this.props.wall.get('bar') || List.of();
+    const bars = [];
     const {index, actions} = this.props;
 
     return <div className="wall-edit">
@@ -48,17 +37,25 @@ export default class WallEdit extends Component {
 
       <Tabs>
         <Tab label="General">
-          <WallEditGeneral action={::this.doGeneralEdit} wall={this.props.wall} />
+          <div className="edit-general">
+            <Paper>
+              <TabEditWall
+                  wallIndex={this.props.wall}
+                  action={this.props.actions.editWall} />
+            </Paper>
+          </div>
         </Tab>
         <Tab label="Bars">
-          <WallEditBars bars={bars} wallIndex={index} actions={actions} />
         </Tab>
       </Tabs>
     </div>;
   }
+          // <WallEditBars bars={bars} wallIndex={index} actions={actions} />
+              // <WallEditGeneral action={::this.doGeneralEdit} wall={this.props.wall} />
 }
 
-WallEdit.propTypes = {
-  wall: PropTypes.instanceOf(Map),
+Editor.propTypes = {
+  wall: PropTypes.number,
+  // wall: PropTypes.instanceOf(Map),
   index: PropTypes.number,
 }

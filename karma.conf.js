@@ -28,9 +28,18 @@ module.exports = function(config) {
     coverageReporter: {
       dir: 'coverage/',
       reporters: [
-        { type: 'html' },
-        { type: 'text' }
-      ]
-    }
+        { type: 'html', subdir: 'report-html' },
+        /*{ type: 'lcov', subdir: 'report-lcov' },*/
+        { type: 'text', subdir: 'report-text' }
+      ],
+      instrumenterOptions: {
+        istanbul: { noCompact:true }
+      }
+    },
+    // logLevel: config.LOG_DEBUG,
+    // captureConsole: true,
+    // mocha: {
+    //   bail: true
+    // }
   });
 };

@@ -1,4 +1,4 @@
-require('../styles/wall.less');
+require('../../styles/wall.less');
 
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
@@ -9,14 +9,14 @@ import { Map, List } from 'immutable'
 export default class Wall extends Component {
 
   render() {
-    const originalSize = this.props.wall.get('size');
-    const bars = this.props.wall.get('bar') || List.of();
+    const originalSize = this.props.wall['size'];
+    const bars = this.props.wall['bar'] || [];
 
     const zoom = this.props.zoom;
 
     const size = {
-      w: originalSize.get('w') * zoom,
-      h: originalSize.get('h') * zoom,
+      w: originalSize['w'] * zoom,
+      h: originalSize['h'] * zoom,
     };
 
     const style = {
@@ -35,6 +35,6 @@ export default class Wall extends Component {
 }
 
 Wall.propTypes = {
-  wall: PropTypes.instanceOf(Map),
+  wall: PropTypes.object,
   zoom: PropTypes.number
 }

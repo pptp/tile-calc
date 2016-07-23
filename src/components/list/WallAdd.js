@@ -1,4 +1,4 @@
-require('../styles/wall.less');
+require('../../styles/wall.less');
 
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'

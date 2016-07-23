@@ -9,16 +9,13 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {green100, green500, green700} from 'material-ui/styles/colors';
 
-import WallList from "../components/WallList"
-import WallEdit from "../components/WallEdit"
-
 import * as wallActions from '../actions/WallActions'
-import Paper from 'material-ui/Paper';
+
+import Main from '../components/Main'
 
 // https://github.com/callemall/material-ui
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -33,33 +30,18 @@ const muiTheme = getMuiTheme({
   // userAgent: req.headers['user-agent'],
 });
 
-
 class App extends Component {
   render() {
     const { actions, walls } = this.props;
-
     const wallList = walls.get('list');
-
     const currentWall = walls.get('edit')
-    const editStatement = (currentWall !== null) ?
-      <WallEdit
-          wall={wallList.get(currentWall)}
-          index={currentWall}
-          actions={actions} /> :
-      '';
 
     return <MuiThemeProvider muiTheme={muiTheme}>
-      <div className="wallListApp">
-        <Paper>
-          <WallList
-              actions={actions}
-              wallList={wallList}
-              currentWall={currentWall}>
-          </WallList>
-        </Paper>
-
-        {editStatement}
-      </div>
+      <Main 
+        wallList={wallList}
+        currentWall={currentWall}
+        actions={actions}
+      />
     </MuiThemeProvider>
   }
 }
