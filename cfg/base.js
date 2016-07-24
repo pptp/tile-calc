@@ -36,8 +36,10 @@ module.exports = {
       stores: `${defaultSettings.srcPath}/stores/`,
       styles: `${defaultSettings.srcPath}/styles/`,
       config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV,
-      react: path.join(__dirname, '..', 'node_modules', 'react')
+      react: path.join(__dirname, '..', 'node_modules', 'react'),
       // react: `${defaultSettings.srcPath}/node_modules/react/`,
+
+      jquery: "./bower_components/jquery/dist/jquery.js"
     }
   },
   module: {}

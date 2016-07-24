@@ -1,0 +1,20 @@
+{
+  "name": "tile",
+  "description": "Graphic interface to count how much tile you need for the bathroom repaires",
+  "main": "",
+  "authors": [
+    "Balashov Mikhail"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/pptp/tile-calc",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
