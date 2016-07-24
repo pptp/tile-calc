@@ -5,12 +5,16 @@ import {
   ADD_BAR,
   EDIT_BAR,
   REMOVE_BAR,
-  SET_TO_EDIT_WALL
+  SET_TO_EDIT_WALL,
+  CANCEL_EDIT_WALL,
 } from "./const";
 
 
 export function setToEditWall(payload) {
   return {type: SET_TO_EDIT_WALL, payload: payload}
+}
+export function cancelEditWall(payload) {
+  return {type: CANCEL_EDIT_WALL, payload: payload}
 }
 
 

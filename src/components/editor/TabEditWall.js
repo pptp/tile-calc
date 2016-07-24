@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
 import { reset } from 'redux-form'
 import { connect } from 'react-redux'
-import FormWall from '../forms/FormWall'
+import FormWall from './forms/FormWall'
 
 export default class TabEditWall extends Component {
 
@@ -10,33 +10,26 @@ export default class TabEditWall extends Component {
     super(props)
 
     this.handleSubmit = this.handleSubmit.bind(this)
-    // this.resetForm = this.resetForm.bind(this)
   }
 
   handleSubmit(data) {
-    const wall = {
-      size: {
-        w: data.w,
-        h: data.h,
-      }
-    }
-
     this.props.action({
-      index: this.props.wallIndex,
-      wall: wall
+      wallIndex: this.props.wallIndex,
+      wall: {
+        size: {
+          w: data.w,
+          h: data.h,
+        }
+      }
     });
 
   }
-  // resetForm() {
-  //   this.props.reset('formWall')
-  // }
 
   render() {
-    // console.log(this.props.wall)
-
     return <div className="edit-general-content">
       <h2>Size</h2>
-      <FormWall onSubmit={this.handleSubmit} wallIndex={this.props.wallIndex} />
+      <FormWall onSubmit={this.handleSubmit}
+          wallIndex={this.props.wallIndex} />
     </div>
   }
 }

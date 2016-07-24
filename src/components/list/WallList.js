@@ -1,5 +1,7 @@
 require('../../styles/components/slider.less');
 
+import { List } from 'immutable'
+
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
 import Slider from 'react-motion-slider'
@@ -7,86 +9,111 @@ import Wall from './Wall'
 import WallAdd from './WallAdd'
 
 import RaisedButton from 'material-ui/RaisedButton';
-// import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
 
 export default class WallList extends Component {
   doSetToEditWall(key) {
-    this.props.actions.setToEditWall(key);
+    this.props.actions.setToEditWall({
+      wallIndex: key
+    });
   }
 
+  updateZoom(props = null) {
+    const $wall = $(ReactDOM.findDOMNode(this.refs.wallWrapAdd))
+
+    const wallList = (props || this.props).wallList
+
+    const zoom = wallList.count() ? wallList.reduce((zoom, wall) => {
+      const size = wall.get('size').toJS()
+      const currentZoom = Math.min($wall.width() / size.w, $wall.height() / size.h)
+      return zoom ? Math.min(zoom, currentZoom) : currentZoom
+    }, false) : 1;
+
+    this.setState({ zoom: zoom })
+  }
+
+  updateDimensions() {
+    this.setState({
+      screen: {
+        width: $(window).width(),
+        height: $(window).height()
+      }
+    })
+    this.updateZoom()
+  }
+  componentWillMount() {
+    this.updateDimensions.call(this);
+  }
   componentDidMount() {
-    const wall = ReactDOM.findDOMNode(this.refs.wallWrapAdd);
-
-    if (!this.state.zoom) {
-      let zoom;
-      
-      const wallStyle = window.getComputedStyle(wall, null);
-
-      const wallWidth = wall.clientWidth -
-        parseFloat(wallStyle.getPropertyValue('padding-left')) -
-        parseFloat(wallStyle.getPropertyValue('padding-right'));
-
-      const wallHeight = wall.clientHeight -
-        parseFloat(wallStyle.getPropertyValue('padding-top')) -
-        parseFloat(wallStyle.getPropertyValue('padding-bottom'));
-
-      const { wallList } = this.props;
-
-      zoom = wallList.reduce((zoom, wall) => {
-        const size = wall.size;
-        const currentZoom = Math.min(wallWidth / size.w, wallHeight / size.h);
-        return zoom ? Math.min(zoom, currentZoom) : currentZoom;
-      }, zoom);
-
-      this.setState({ zoom: zoom });
-    }
+    window.addEventListener("resize", this.updateDimensions.bind(this))
+    this.updateZoom()
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this))
+  }
+  componentWillReceiveProps(nextProps) {
+    this.updateZoom(nextProps)
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      zoom: null,
-      adding: false
+      zoom: 1,
+      adding: false,
+      screen: {
+        width: $(window).width(),
+        height: $(window).height()
+      }
     }
+
   }
 
   render() {
-    const { wallList, currentWall, actions } = this.props;
+    const { wallList, currentWall, actions } = this.props
+    const { zoom } = this.state
 
-    // console.log(wallList[0].size);
+    // const lastWall = wallList[wallList.length - 1];
+    let suggestWidth = 0;
+    let suggestHeight = 0;
 
-    const lastWall = wallList[wallList.length - 1];
-    const suggestWidth = lastWall ? lastWall.size.w : 0
-    const suggestHeight = lastWall ? lastWall.size.h : 0
+    if (wallList.count()) {
+      const lastWall = wallList.last();
+      suggestWidth = parseInt(lastWall.get("size").get("w"))
+      suggestHeight = parseInt(lastWall.get("size").get("h"))
+    }
 
-    return <div className="">
-      <Slider ref="slider" autoHeight={true} slidesToShow={3}>
+    console.log('Wall List count:', wallList.count());
+    
+    const slidesToShow = Math.max(1, Math.floor(this.state.screen.width / 200));
+
+    return <div>
+      <Slider
+          ref="slider"
+          autoHeight={true}
+          slidesToShow={slidesToShow}>
+
         { wallList.map((wall, i) => {
-          const className = (i == currentWall) ? 'active' : '';
+          const className = (i == currentWall) ? 'active' : ''
           return <li key={`slide-${i}`}
               className={"slide " + className}
-              ref="wallWrap"
-              onClick={this.doSetToEditWall.bind(this, i)} >
-            <Wall wall={wall} zoom={this.state.zoom}  />
+              onClick={this.doSetToEditWall.bind(this, i)}>
+            <Wall wall={wall} zoom={zoom} />
           </li>
         })}
         <li className="slide slide-add" ref="wallWrapAdd">
-          <WallAdd action={actions.addWall} width={suggestWidth} height={suggestHeight} />
+          <WallAdd
+              action={actions.addWall}
+              width={suggestWidth}
+              height={suggestHeight}
+          />
         </li>
-
       </Slider>
     </div>
   }
-      // <Toolbar>
-      //   <ToolbarGroup firstChild={false}>
-      //     <ToolbarTitle text="Walls" />
-      //     <RaisedButton label="Add" primary={true} onClick={::this.onAddWall} />
-      //   </ToolbarGroup>
-      // </Toolbar>
 }
 
 WallList.propTypes = {
-  wallList: PropTypes.array,
-  currentWall: PropTypes.number
+  wallList: PropTypes.instanceOf(List),
+  currentWall: PropTypes.number,
+  actions: PropTypes.object,
 }

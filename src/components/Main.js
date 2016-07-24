@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 
+import { List } from 'immutable'
+
 import WallList from "../components/list/WallList"
 import Editor from "../components/editor/Editor"
 
@@ -7,23 +9,34 @@ import Paper from 'material-ui/Paper';
 
 export default class Main extends Component {
   render() {
-    const { wallList, currentWall, actions } = this.props;
+    const {
+      wallList,
+      currentWall,
+      actions
+    } = this.props;
 
-    const editStatement = (currentWall !== null) ?
-      <Editor 
-          wall={currentWall}
-          index={currentWall}
-          actions={actions} /> :
-      '';
+    console.log("currentWall:", currentWall);
 
-    // return <div className="wallListApp Main">
+    let editStatement;
+    if (currentWall !== null) {
+      const editableWall = wallList.get(currentWall);
+      editStatement = <Editor
+          wallIndex={currentWall}
+          wall={editableWall}
+          actions={actions} />
+      
+      // editStatement = '';
+    } else {
+      editStatement = '';
+    }
+
     return <div className="index">
       <Paper>
         <WallList
             actions={actions}
             wallList={wallList}
-            currentWall={currentWall}>
-        </WallList>
+            currentWall={currentWall}
+        />
       </Paper>
 
       {editStatement}
@@ -32,7 +45,7 @@ export default class Main extends Component {
 }
 
 Main.propTypes = {
-  wallList:    PropTypes.array.required,
-  currentWall: PropTypes.object.required,
-  actions:     PropTypes.array.required,
+  wallList:    PropTypes.instanceOf(List),
+  currentWall: PropTypes.number,
+  actions:     PropTypes.object,
 }

@@ -9,14 +9,14 @@ import { Map, List } from 'immutable'
 export default class Wall extends Component {
 
   render() {
-    const originalSize = this.props.wall['size'];
-    const bars = this.props.wall['bar'] || [];
+    const originalSize = this.props.wall.get('size');
+    const bars = this.props.wall.get('bar') || List.of();
 
     const zoom = this.props.zoom;
 
     const size = {
-      w: originalSize['w'] * zoom,
-      h: originalSize['h'] * zoom,
+      w: originalSize.get('w') * zoom,
+      h: originalSize.get('h') * zoom,
     };
 
     const style = {
@@ -27,14 +27,17 @@ export default class Wall extends Component {
     return <div className="wall-wrapper" ref="root">
       <div className="wall" style={style}>
         { bars.map((bar, i) => 
-          <Bar key={`bar-${i}`} bar={bar} zoom={zoom} />
+          <Bar key={`bar-${i}`}
+              bar={bar}
+              zoom={zoom} />
         )}
       </div>
     </div>
+
   }
 }
 
 Wall.propTypes = {
-  wall: PropTypes.object,
+  wall: PropTypes.instanceOf(Map),
   zoom: PropTypes.number
 }

@@ -1,16 +1,18 @@
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
 
+import { Map } from 'immutable'
+
 export default class Bar extends Component {
 
   render() {
     const zoom = this.props.zoom;
 
     const style = {
-      left:   this.props.bar.x * zoom,
-      top:    this.props.bar.y * zoom,
-      width:  this.props.bar.w * zoom,
-      height: this.props.bar.h * zoom
+      left:   this.props.bar.get('x') * zoom,
+      top:    this.props.bar.get('y') * zoom,
+      width:  this.props.bar.get('w') * zoom,
+      height: this.props.bar.get('h') * zoom
     }
 
 
@@ -33,6 +35,6 @@ export default class Bar extends Component {
 }
 
 Bar.propTypes = {
-  bar: PropTypes.object,
+  bar: PropTypes.instanceOf(Map),
   zoom: PropTypes.number
 }

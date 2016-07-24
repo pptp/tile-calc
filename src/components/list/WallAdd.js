@@ -2,16 +2,29 @@ require('../../styles/wall.less');
 
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 
-export default class Wall extends Component {
-  doAdd() {
+import FormWallAdd from './forms/FormWallAdd'
+
+export default class WallAdd extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: false
+    }
+    this.doAdd = this.doAdd.bind(this)
+    this.resetForm = this.resetForm.bind(this)
+  }
+
+  resetForm() {
+    this.doDeactivate()
+  }
+
+  doAdd(data) {
     this.props.action({
-      w: this.state.width,
-      h: this.state.height,
-    });
+      wall: {
+        size: { w: data.w, h: data.h }
+      }
+    })
     this.doDeactivate();
   }
 
@@ -21,41 +34,32 @@ export default class Wall extends Component {
   doDeactivate() {
     this.setState({active: false});
   }
-  doSetWidth(event) {
-    this.setState({ width: parseFloat(event.target.value) })
-  }
-  doSetHeight(event) {
-    this.setState({ height: parseFloat(event.target.value) })
-  }
+  // doSetWidth(event) {
+  //   this.setState({ width: parseFloat(event.target.value) })
+  // }
+  // doSetHeight(event) {
+  //   this.setState({ height: parseFloat(event.target.value) })
+  // }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: false,
-      width: props.width,
-      height: props.height
-    }
-  }
 
   render() {
     if (!this.state.active) {
-      return <div className="item-add-placeholder" onClick={::this.doActivate}></div>;
+      return <div className="item-add-placeholder"
+          onClick={::this.doActivate}>
+      </div>;
     }
 
-    const addDisabled = (!this.state.width || !this.state.height);
+    // const addDisabled = (!this.props.data.w || !this.props.data.h);
 
     return <div className="item-add">
-      <TextField hintText="Width" fullWidth={true} value={this.state.width} onChange={::this.doSetWidth} /><br />
-      <TextField hintText="Height" fullWidth={true} value={this.state.height} onChange={::this.doSetHeight} /><br />
-
-      <br /><br />
-      <RaisedButton label="Add" primary={true} disabled={addDisabled} onClick={::this.doAdd} />
-      <FlatButton label="Cancel" secondary={true} onClick={::this.doDeactivate} />
+      <FormWallAdd
+          onSubmit={this.doAdd}
+          onReset={this.resetForm} />
     </div>
   }
 }
 
-Wall.propTypes = {
+WallAdd.propTypes = {
   action: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,

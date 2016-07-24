@@ -2,60 +2,85 @@ require('../../styles/wall-edit.less');
 
 import React, { PropTypes, Component } from 'react'
 
+import { Map } from 'immutable'
+
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 
 import TabEditWall from './TabEditWall'
+import TabEditBars from './TabEditBars'
 
 
 export default class Editor extends Component {
   doCancelEdit() {
-    this.props.actions.setToEditWall(null);
+    this.props.actions.cancelEditWall();
   }
   doRemoveWall() {
-    this.props.actions.removeWall(this.props.index);
+    this.props.actions.removeWall({
+      wallIndex: this.props.wallIndex
+    });
     this.doCancelEdit();
   }
 
   render() {
-    // const bars = this.props.wall.get('bar') || List.of();
-    const bars = [];
-    const {index, actions} = this.props;
+    const {wallIndex, actions} = this.props;
+    const bars = this.props.wall.get('bar');
 
+    
     return <div className="wall-edit">
       <Toolbar>
         <ToolbarGroup >
           <ToolbarTitle text="Edit Wall" />
         </ToolbarGroup>
+
         <ToolbarGroup>
-          <FlatButton secondary={true} label="Remove" onClick={::this.doRemoveWall} />
-          <FlatButton  label="Cancel" onClick={::this.doCancelEdit} />
+          <FlatButton
+              secondary={true}
+              label="Remove"
+              onClick={::this.doRemoveWall}
+          />
+          <FlatButton
+              label="Cancel"
+              onClick={::this.doCancelEdit}
+          />
         </ToolbarGroup>
       </Toolbar>
-
+      
       <Tabs>
         <Tab label="General">
           <div className="edit-general">
             <Paper>
               <TabEditWall
-                  wallIndex={this.props.wall}
-                  action={this.props.actions.editWall} />
+                  wallIndex={wallIndex}
+                  action={this.props.actions.editWall}
+              />
             </Paper>
           </div>
         </Tab>
         <Tab label="Bars">
+          <div className="edit-bars">
+            <Paper>
+              <TabEditBars
+                  bars={bars}
+                  wallIndex={wallIndex}
+                  actions={this.props.actions}
+              />
+            </Paper>
+          </div>
         </Tab>
       </Tabs>
+
     </div>;
+
+    
   }
-          // <WallEditBars bars={bars} wallIndex={index} actions={actions} />
-              // <WallEditGeneral action={::this.doGeneralEdit} wall={this.props.wall} />
+
 }
 
 Editor.propTypes = {
-  wall: PropTypes.number,
-  // wall: PropTypes.instanceOf(Map),
-  index: PropTypes.number,
+  wallIndex: PropTypes.number,
+  wall: PropTypes.instanceOf(Map),
+  actions: PropTypes.object,
 }
