@@ -1,10 +1,23 @@
+import {
+  SET_TO_EDIT_TILE
+} from "../actions/const"
+
 import { List, Map } from 'immutable';
 
-const initialState = List.of(
-  Map({ w: 50, h: 100 }),
-  Map({ w: 100, h: 100 })
-)
+import { init } from '../core/tile'
+import { setToEditTile } from '../core/edit'
+
+const initialState = init();
 
 export default function tiles(state = initialState, action) {
+  const callbacks = {
+    SET_TO_EDIT_TILE: setToEditTile,
+  };
+
+  const callback = callbacks[action.type]
+  if (callback) {
+    return callback.call(this, state, action.payload);
+  }
+
   return state;
 }

@@ -10,6 +10,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {green100, green500, green700} from 'material-ui/styles/colors';
 
 import * as wallActions from '../actions/WallActions'
+import * as tileActions from '../actions/TileActions'
 
 import Main from '../components/Main'
 
@@ -32,14 +33,22 @@ const muiTheme = getMuiTheme({
 
 class App extends Component {
   render() {
-    const { actions, walls } = this.props;
-    const wallList = walls.get('list');
+    const { actions, walls, tiles } = this.props;
+
+    const tileList = tiles.get('list')
+    const currentTile = tiles.get('edit')
+
+    const wallList = walls.get('list')
     const currentWall = walls.get('edit')
+
+    // console.log( tileList.toJS() );
 
     return <MuiThemeProvider muiTheme={muiTheme}>
       <Main 
+        tileList={tileList}
         wallList={wallList}
         currentWall={currentWall}
+        currentTile={currentTile}
         actions={actions}
       />
     </MuiThemeProvider>
@@ -52,11 +61,12 @@ App.propTypes = {
 };
 function mapStateToProps(state) {
   return {
-    walls: state.walls
+    walls: state.walls,
+    tiles: state.tiles
   };
 }
 function mapDispatchToProps(dispatch) {
-  const actions = { ...wallActions };
+  const actions = { ...wallActions, ...tileActions };
   const actionMap = { actions: bindActionCreators(actions, dispatch) };
   return actionMap;
 }

@@ -5,26 +5,14 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import { checkNumeric } from '../../../utils/validators'
+import { rNumericValidator } from '../../../utils/validators'
 
 export const fields = ['w', 'h']
 
 const validate = values => {
   const errors = {}
-  if (!values.w) {
-    errors.w = "Required"
-  } else {
-    if (!checkNumeric(values.w)) {
-      errors.w = "Should be a number"
-    }
-  }
-  if (!values.h) {
-    errors.h = "Required"
-  } else {
-    if (!checkNumeric(values.h)) {
-      errors.h = "Should be a number"
-    }
-  }
+  errors.w = rNumericValidator(values.w);
+  errors.h = rNumericValidator(values.h);
   return errors;
 }
 

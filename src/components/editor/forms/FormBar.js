@@ -5,7 +5,24 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
+import {
+  rNumericValidator,
+  requireValidator
+} from '../../../utils/validators'
+
 export const fields = ['name', 'w', 'h', 'x', 'y']
+
+const validate = values => {
+  const errors = {}
+
+  errors.x = rNumericValidator(values.x)
+  errors.y = rNumericValidator(values.y)
+  errors.w = rNumericValidator(values.w)
+  errors.h = rNumericValidator(values.h)
+  errors.name = requireValidator(values.name)
+
+  return errors
+}
 
 class FormBar extends Component {
   render() {
@@ -14,7 +31,8 @@ class FormBar extends Component {
       handleSubmit,
       resetForm,
       submitting,
-      onDelete
+      onDelete,
+      errors
     } = this.props
 
     const leftFieldStyle = {
@@ -25,6 +43,8 @@ class FormBar extends Component {
       marginLeft: '10%'
     }
 
+    const submitDisabled = !!Object.keys(errors).length
+
     return <form onSubmit={handleSubmit}>
       <TextField
           floatingLabelText="Bar Name"
@@ -32,6 +52,7 @@ class FormBar extends Component {
           fullWidth={true}
           name={name.name}
           onChange={name.onChange}
+          errorText={name.dirty && name.error}
           value={name.value} />
       <br />
       
@@ -41,6 +62,7 @@ class FormBar extends Component {
           style={leftFieldStyle}
           name={x.name}
           onChange={x.onChange}
+          errorText={x.dirty && x.error}
           value={x.value} />
 
       <TextField
@@ -49,6 +71,7 @@ class FormBar extends Component {
           style={rightFieldStyle}
           name={y.name}
           onChange={y.onChange}
+          errorText={y.dirty && y.error}
           value={y.value} />
 
 
@@ -58,6 +81,7 @@ class FormBar extends Component {
           style={leftFieldStyle}
           name={w.name}
           onChange={w.onChange}
+          errorText={w.dirty && w.error}
           value={w.value} />
 
       <TextField
@@ -66,6 +90,7 @@ class FormBar extends Component {
           style={rightFieldStyle}
           name={h.name}
           onChange={h.onChange}
+          errorText={h.dirty && h.error}
           value={h.value} />
 
       <br />
@@ -85,7 +110,7 @@ class FormBar extends Component {
       <RaisedButton
           label="Change"
           primary={true}
-          disabled={submitting}
+          disabled={submitDisabled || submitting}
           onClick={handleSubmit} />
     </form>
 
@@ -104,7 +129,8 @@ FormBar.propTypes = {
 
 export default reduxForm({
   form: 'formBar',
-  fields
+  fields,
+  validate
 },
 (state, component) => {
   const { wallIndex, barIndex } = component;

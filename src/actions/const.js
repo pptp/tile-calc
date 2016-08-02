@@ -2,6 +2,8 @@
 export const SET_TO_EDIT_WALL = 'SET_TO_EDIT_WALL';
 export const CANCEL_EDIT_WALL = 'CANCEL_EDIT_WALL';
 
+export const SET_TO_EDIT_TILE = 'SET_TO_EDIT_TILE';
+
 
 export const ADD_WALL = 'ADD_WALL';
 export const EDIT_WALL = 'EDIT_WALL';

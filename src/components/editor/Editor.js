@@ -2,7 +2,7 @@ require('../../styles/wall-edit.less');
 
 import React, { PropTypes, Component } from 'react'
 
-import { Map } from 'immutable'
+import { Map, List } from 'immutable'
 
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
@@ -11,6 +11,7 @@ import Paper from 'material-ui/Paper';
 
 import TabEditWall from './TabEditWall'
 import TabEditBars from './TabEditBars'
+import TabEditTiles from './TabEditTiles'
 
 
 export default class Editor extends Component {
@@ -25,10 +26,10 @@ export default class Editor extends Component {
   }
 
   render() {
-    const {wallIndex, actions} = this.props;
+    const {wallIndex, actions, tileList, currentTile, wall} = this.props;
     const bars = this.props.wall.get('bar');
 
-    
+
     return <div className="wall-edit">
       <Toolbar>
         <ToolbarGroup >
@@ -59,6 +60,7 @@ export default class Editor extends Component {
             </Paper>
           </div>
         </Tab>
+        
         <Tab label="Bars">
           <div className="edit-bars">
             <Paper>
@@ -70,6 +72,22 @@ export default class Editor extends Component {
             </Paper>
           </div>
         </Tab>
+
+
+        <Tab label="Tiles">
+          <div className="edit-tiles">
+            <Paper>
+              <TabEditTiles 
+                  wall={wall}
+                  wallIndex={wallIndex}
+                  tileList={tileList}
+                  currentTile={currentTile}
+                  actions={this.props.actions}
+              />
+            </Paper>
+          </div>
+        </Tab>
+
       </Tabs>
 
     </div>;
@@ -81,6 +99,8 @@ export default class Editor extends Component {
 
 Editor.propTypes = {
   wallIndex: PropTypes.number,
+  currentTile: PropTypes.number,
   wall: PropTypes.instanceOf(Map),
   actions: PropTypes.object,
+  tileList: PropTypes.instanceOf(List),
 }

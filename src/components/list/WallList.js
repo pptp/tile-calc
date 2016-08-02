@@ -1,4 +1,5 @@
 require('../../styles/components/slider.less');
+require('../../styles/components/slider-wall.less');
 
 import { List } from 'immutable'
 
@@ -95,12 +96,12 @@ export default class WallList extends Component {
         { wallList.map((wall, i) => {
           const className = (i == currentWall) ? 'active' : ''
           return <li key={`slide-${i}`}
-              className={"slide " + className}
+              className={"slide wall-slide " + className}
               onClick={this.doSetToEditWall.bind(this, i)}>
             <Wall wall={wall} zoom={zoom} />
           </li>
         })}
-        <li className="slide slide-add" ref="wallWrapAdd">
+        <li className="slide wall-slide slide-add" ref="wallWrapAdd">
           <WallAdd
               action={actions.addWall}
               width={suggestWidth}

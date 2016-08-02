@@ -12,19 +12,23 @@ export default class Main extends Component {
     const {
       wallList,
       currentWall,
-      actions
+      currentTile,
+      actions,
+      tileList
     } = this.props;
 
-    console.log("currentWall:", currentWall);
+    // console.log("currentWall:", currentWall);
 
     let editStatement;
     if (currentWall !== null) {
       const editableWall = wallList.get(currentWall);
       editStatement = <Editor
-          wallIndex={currentWall}
-          wall={editableWall}
-          actions={actions} />
-      
+        tileList={tileList}
+        wallIndex={currentWall}
+        currentTile={currentTile}
+        wall={editableWall}
+        actions={actions} />
+
       // editStatement = '';
     } else {
       editStatement = '';
@@ -46,6 +50,8 @@ export default class Main extends Component {
 
 Main.propTypes = {
   wallList:    PropTypes.instanceOf(List),
+  tileList:    PropTypes.instanceOf(List),
   currentWall: PropTypes.number,
+  currentTile: PropTypes.number,
   actions:     PropTypes.object,
 }

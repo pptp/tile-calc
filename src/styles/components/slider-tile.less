@@ -1,0 +1,23 @@
+.tile-slide {
+  /*box-sizing: */
+  min-height: 100px;
+  padding: 8px;
+  border: 2px solid transparent;
+  position: relative;
+  &.active {
+    border: 2px solid #35BED4;
+    padding: 8px;
+  }
+
+  .definition {
+    position: absolute;
+    left: 8px;
+    top: 15px;
+    color: #444;
+    font-size: 0.7rem;
+    font-weight: bold;
+    background: #eee;
+    padding: 2px 5px;
+    border-radius: 10px;
+  }
+}

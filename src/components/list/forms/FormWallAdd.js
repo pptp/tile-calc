@@ -1,18 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 
 import { reduxForm } from 'redux-form'
-// import { reset } from 'redux-form'
 
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
+import { rNumericValidator } from '../../../utils/validators'
+
 export const fields = ['w', 'h']
+
+const validate = values => {
+  const errors = {}
+  errors.w = rNumericValidator(values.w)
+  errors.h = rNumericValidator(values.h)
+  return errors
+}
 
 class FormWallAdd extends Component {
   constructor(props) {
     super(props)
-
     this.reset = this.reset.bind(this)
   }
 
@@ -26,10 +33,14 @@ class FormWallAdd extends Component {
       fields: { w, h},
       handleSubmit,
       resetForm,
-      submitting
+      submitting,
+      errors,
+      dirty
     } = this.props
+    
 
-    const disabledAdd = (!w.value || !h.value)
+    // const disabledAdd = (!w.value || !h.value)
+    const submitDisabled = !!Object.keys(errors).length
 
     return <form onSubmit={handleSubmit}>
       <TextField
@@ -37,6 +48,7 @@ class FormWallAdd extends Component {
           fullWidth={true}
           name={w.name}
           value={w.value}
+          errorText={w.dirty && w.error}
           onChange={w.onChange}
       />
       <br />
@@ -46,6 +58,7 @@ class FormWallAdd extends Component {
           fullWidth={true}
           name={h.name}
           value={h.value}
+          errorText={h.dirty && h.error}
           onChange={h.onChange}
       />
       <br />
@@ -54,7 +67,7 @@ class FormWallAdd extends Component {
       <RaisedButton
           label="Add"
           primary={true}
-          disabled={disabledAdd}
+          disabled={submitDisabled}
           onClick={handleSubmit} 
       />
       <FlatButton
@@ -76,5 +89,6 @@ FormWallAdd.propTypes = {
 
 export default reduxForm({
   form: 'formWallAdd',
-  fields
+  fields,
+  validate
 }) (FormWallAdd)

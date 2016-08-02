@@ -1,7 +1,16 @@
-export function checkNumeric(input) {
-  if (isNaN(parseFloat(input))) {
-    return false;
-  }
+import { checkNumeric } from './checkers';
 
-  return /^-{0,1}\d*\.{0,1}\d+$/.test(input);
+export function rNumericValidator(input) {
+  if (!input) {
+    return "Required"
+  }
+  if (!checkNumeric(input)) {
+    return "Should be a number"
+  }
+}
+
+export function requireValidator(input) {
+  if (!input) {
+    return "Required"
+  }
 }
