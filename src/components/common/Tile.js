@@ -8,7 +8,10 @@ import { Map, List } from 'immutable'
 export default class Tile extends Component {
 
   render() {
-    const originalSize = this.props.tile.get('size').toJS();
+    const tile = this.props.tile;
+
+    const originalSize = tile.get('size').toJS();
+    const name = tile.get('name')
     const zoom = this.props.zoom;
 
     const size = {
@@ -24,7 +27,8 @@ export default class Tile extends Component {
     return <div className="tile-wrapper" ref="root">
       <div className="tile" style={style}>
       </div>
-      <span className="definition">{originalSize.w}x{originalSize.h}</span>
+      <span className="label name">{name}</span>
+      <span className="label definition">{originalSize.w}x{originalSize.h}</span>
     </div>
 
   }

@@ -3,14 +3,24 @@ import { Map, List } from 'immutable'
 export function init() {
   return Map({
     edit: null,
+    editWall: null,
     list: List.of(
       Map({
         size: Map({ w: 1000, h: 2000}),
         bar: List.of(
           // Map({ name: 'hui', x: 2, y: 2, h: 1, w: 3})
-        )
+        ),
+        /*
+        tileMap: List.of(
+          Map({
+            tileId: 1,
+            count: 2
+          })
+        ),
+        */
+        tileMap: List.of()
       })
-    )
+    ),
   });
 }
 

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-import { List } from 'immutable'
+import { List, Map } from 'immutable'
 
 import WallList from "../components/list/WallList"
 import Editor from "../components/editor/Editor"
@@ -11,23 +11,25 @@ export default class Main extends Component {
   render() {
     const {
       wallList,
+      currentWallIndex,
+      currentTileIndex,
       currentWall,
       currentTile,
       actions,
       tileList
     } = this.props;
 
-    // console.log("currentWall:", currentWall);
-
     let editStatement;
-    if (currentWall !== null) {
-      const editableWall = wallList.get(currentWall);
+    if (currentWallIndex !== null) {
+      const editableWall = wallList.get(currentWallIndex);
       editStatement = <Editor
         tileList={tileList}
-        wallIndex={currentWall}
-        currentTile={currentTile}
-        wall={editableWall}
+        wallIndex={currentWallIndex}
+        wall={currentWall}
+        tile={currentTile}
+        currentTileIndex={currentTileIndex}
         actions={actions} />
+        // wall={editableWall}
 
       // editStatement = '';
     } else {
@@ -39,7 +41,7 @@ export default class Main extends Component {
         <WallList
             actions={actions}
             wallList={wallList}
-            currentWall={currentWall}
+            currentWallIndex={currentWallIndex}
         />
       </Paper>
 
@@ -51,7 +53,9 @@ export default class Main extends Component {
 Main.propTypes = {
   wallList:    PropTypes.instanceOf(List),
   tileList:    PropTypes.instanceOf(List),
-  currentWall: PropTypes.number,
-  currentTile: PropTypes.number,
+  currentWall: PropTypes.instanceOf(Map),
+  currentWallIndex: PropTypes.number,
+  currentTile: PropTypes.instanceOf(Map),
+  currentTileIndex: PropTypes.number,
   actions:     PropTypes.object,
 }

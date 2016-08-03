@@ -9,7 +9,8 @@ import { connect } from 'react-redux'
 import { List , ListItem} from 'material-ui/List';
 
 import Slider from 'react-motion-slider'
-import TabEditTilesList from './TabEditTilesList'
+import TilesList from './wall-tiler/TilesList'
+import WallTiler from './wall-tiler/WallTiler'
 
 export default class TabEditTiles extends Component {
   constructor(props) {
@@ -19,23 +20,26 @@ export default class TabEditTiles extends Component {
   render() {
     const {
       tileList,
-      currentTile,
-      actions
+      currentTileIndex,
+      actions,
+      wall,
+      tile,
+      wallIndex
     } = this.props
-      // <div key={'tile-' + i}>{tile.get('id')}</div>
-      // <List>
-      //   {tileList.map((tile, i) => 
-      //     <ListItem key={'tile-' + i}>
-      //       {tile}
-      //     </ListItem>
-      //   )}
-      // </List>
 
     return <div>
-      <TabEditTilesList 
+      <TilesList 
         tileList={tileList}
         action={actions.setToEditTile}
-        currentTile={currentTile}
+        currentTileIndex={currentTileIndex}
+      />
+      <WallTiler 
+        wall={wall}
+        tile={tile}
+        tileList={tileList}
+        wallIndex={wallIndex}
+        actions={actions}
+        currentTileIndex={currentTileIndex}
       />
     </div>
   }
@@ -44,8 +48,9 @@ export default class TabEditTiles extends Component {
 TabEditTiles.propTypes = {
   tileList: PropTypes.instanceOf(immutableList),
   actions: PropTypes.object,
-  currentTile: PropTypes.number,
+  currentTileIndex: PropTypes.number,
   wall: PropTypes.instanceOf(Map),
+  tile: PropTypes.instanceOf(Map),
   wallIndex: PropTypes.number,
 };
 

@@ -6,7 +6,7 @@ import { List } from 'immutable'
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
 import Slider from 'react-motion-slider'
-import Wall from './Wall'
+import Wall from '../common/Wall'
 import WallAdd from './WallAdd'
 
 import RaisedButton from 'material-ui/RaisedButton';
@@ -70,7 +70,7 @@ export default class WallList extends Component {
   }
 
   render() {
-    const { wallList, currentWall, actions } = this.props
+    const { wallList, currentWallIndex, actions } = this.props
     const { zoom } = this.state
 
     // const lastWall = wallList[wallList.length - 1];
@@ -83,7 +83,7 @@ export default class WallList extends Component {
       suggestHeight = parseInt(lastWall.get("size").get("h"))
     }
 
-    console.log('Wall List count:', wallList.count());
+    // console.log('Wall List count:', wallList.count());
     
     const slidesToShow = Math.max(1, Math.floor(this.state.screen.width / 200));
 
@@ -94,7 +94,7 @@ export default class WallList extends Component {
           slidesToShow={slidesToShow}>
 
         { wallList.map((wall, i) => {
-          const className = (i == currentWall) ? 'active' : ''
+          const className = (i == currentWallIndex) ? 'active' : ''
           return <li key={`slide-${i}`}
               className={"slide wall-slide " + className}
               onClick={this.doSetToEditWall.bind(this, i)}>
@@ -115,6 +115,6 @@ export default class WallList extends Component {
 
 WallList.propTypes = {
   wallList: PropTypes.instanceOf(List),
-  currentWall: PropTypes.number,
+  currentWallIndex: PropTypes.number,
   actions: PropTypes.object,
 }

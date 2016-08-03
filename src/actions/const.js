@@ -12,3 +12,6 @@ export const REMOVE_WALL = 'REMOVE_WALL';
 export const ADD_BAR = 'ADD_BAR';
 export const EDIT_BAR = 'EDIT_BAR';
 export const REMOVE_BAR = 'REMOVE_BAR';
+
+export const ADD_TILE_TO_WALL = 'ADD_TILE_TO_WALL';
+export const REMOVE_TILE_FROM_WALL = 'REMOVE_TILE_FROM_WALL';

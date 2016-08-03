@@ -1,5 +1,5 @@
-require('../../styles/components/slider.less');
-require('../../styles/components/slider-tile.less');
+require('../../../styles/components/slider.less');
+require('../../../styles/components/slider-tile.less');
 
 import { List } from 'immutable'
 
@@ -11,9 +11,9 @@ import Slider from 'react-motion-slider'
 
 import RaisedButton from 'material-ui/RaisedButton';
 
-import Tile from './Tile'
+import Tile from '../../common/Tile'
 
-export default class TabEditTilesList extends Component {
+export default class TilesList extends Component {
   doSetToEditTile(key) {
     this.props.action({
       tileIndex: key
@@ -70,7 +70,7 @@ export default class TabEditTilesList extends Component {
   }
 
   render() {
-    const { tileList, currentTile } = this.props
+    const { tileList, currentTileIndex } = this.props
     const { zoom } = this.state
 
     const slidesToShow = Math.max(1, Math.floor(this.state.screen.width / 100));
@@ -82,7 +82,7 @@ export default class TabEditTilesList extends Component {
           slidesToShow={slidesToShow}>
 
         { tileList.map((tile, i) => {
-          const className = (i == currentTile) ? 'active' : ''
+          const className = (i == currentTileIndex) ? 'active' : ''
           return <li key={`slide-${i}`}
               ref="tile"
               onClick={this.doSetToEditTile.bind(this, i)}
@@ -98,8 +98,8 @@ export default class TabEditTilesList extends Component {
 }
               // onClick={this.doSetToEditWall.bind(this, i)}>
 
-TabEditTilesList.propTypes = {
+TilesList.propTypes = {
   tileList: PropTypes.instanceOf(List),
-  currentTile: PropTypes.number,
+  currentTileIndex: PropTypes.number,
   action: PropTypes.func,
 }

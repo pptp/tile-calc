@@ -26,9 +26,15 @@ export default class Editor extends Component {
   }
 
   render() {
-    const {wallIndex, actions, tileList, currentTile, wall} = this.props;
-    const bars = this.props.wall.get('bar');
-
+    const {
+      wallIndex,
+      actions,
+      tileList,
+      currentTileIndex,
+      wall,
+      tile
+    } = this.props;
+    const bars = wall.get('bar');
 
     return <div className="wall-edit">
       <Toolbar>
@@ -79,9 +85,10 @@ export default class Editor extends Component {
             <Paper>
               <TabEditTiles 
                   wall={wall}
+                  tile={tile}
                   wallIndex={wallIndex}
                   tileList={tileList}
-                  currentTile={currentTile}
+                  currentTileIndex={currentTileIndex}
                   actions={this.props.actions}
               />
             </Paper>
@@ -91,16 +98,14 @@ export default class Editor extends Component {
       </Tabs>
 
     </div>;
-
-    
   }
-
 }
 
 Editor.propTypes = {
   wallIndex: PropTypes.number,
-  currentTile: PropTypes.number,
+  currentTileIndex: PropTypes.number,
   wall: PropTypes.instanceOf(Map),
+  tile: PropTypes.instanceOf(Map),
   actions: PropTypes.object,
   tileList: PropTypes.instanceOf(List),
 }

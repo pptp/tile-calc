@@ -28,7 +28,6 @@ const muiTheme = getMuiTheme({
   avatar: {
     borderColor: null,
   },
-  // userAgent: req.headers['user-agent'],
 });
 
 class App extends Component {
@@ -36,18 +35,20 @@ class App extends Component {
     const { actions, walls, tiles } = this.props;
 
     const tileList = tiles.get('list')
-    const currentTile = tiles.get('edit')
+    const currentTileIndex = tiles.get('edit')
+    const currentTile = tiles.get('editTile')
 
     const wallList = walls.get('list')
-    const currentWall = walls.get('edit')
-
-    // console.log( tileList.toJS() );
+    const currentWallIndex = walls.get('edit')
+    const currentWall = walls.get('editWall')
 
     return <MuiThemeProvider muiTheme={muiTheme}>
       <Main 
         tileList={tileList}
         wallList={wallList}
+        currentWallIndex={currentWallIndex}
         currentWall={currentWall}
+        currentTileIndex={currentTileIndex}
         currentTile={currentTile}
         actions={actions}
       />

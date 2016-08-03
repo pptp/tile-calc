@@ -9,15 +9,21 @@
     padding: 8px;
   }
 
-  .definition {
+  .label {
     position: absolute;
     left: 8px;
-    top: 15px;
     color: #444;
     font-size: 0.7rem;
-    font-weight: bold;
-    background: #eee;
+    background: #ddd;
     padding: 2px 5px;
     border-radius: 10px;
+
+    &.definition {
+      top: 35px;
+    }
+    &.name {
+      font-weight: bold;
+      top: 15px;
+    }
   }
 }
