@@ -70,7 +70,12 @@ export default class WallList extends Component {
   }
 
   render() {
-    const { wallList, currentWallIndex, actions } = this.props
+    const {
+      wallList,
+      currentWallIndex,
+      actions,
+      tileList
+    } = this.props
     const { zoom } = this.state
 
     // const lastWall = wallList[wallList.length - 1];
@@ -98,7 +103,11 @@ export default class WallList extends Component {
           return <li key={`slide-${i}`}
               className={"slide wall-slide " + className}
               onClick={this.doSetToEditWall.bind(this, i)}>
-            <Wall wall={wall} zoom={zoom} />
+            <Wall 
+                wall={wall}
+                zoom={zoom}
+                tileList={tileList}
+            />
           </li>
         })}
         <li className="slide wall-slide slide-add" ref="wallWrapAdd">
@@ -117,4 +126,5 @@ WallList.propTypes = {
   wallList: PropTypes.instanceOf(List),
   currentWallIndex: PropTypes.number,
   actions: PropTypes.object,
+  tileList: PropTypes.instanceOf(List),
 }

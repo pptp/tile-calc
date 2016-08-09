@@ -13,8 +13,19 @@
     .bar {
       position: absolute;
       background: #444;
+      z-index: 10;
     }
 
+    .tile {
+      background: #ddd;
+      border: 1px solid #bbb;
+      position: absolute;
+
+      .tile-bar {
+        background: #999;
+        position: relative;
+      }
+    }
     
   }
 }

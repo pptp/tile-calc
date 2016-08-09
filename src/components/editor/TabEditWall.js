@@ -13,8 +13,8 @@ export default class TabEditWall extends Component {
   }
 
   handleSubmit(data) {
-    this.props.action({
-      wallIndex: this.props.wallIndex,
+    this.props.actions.editWall({
+      // wallIndex: this.props.wallIndex,
       wall: {
         size: {
           w: data.w,
@@ -22,13 +22,17 @@ export default class TabEditWall extends Component {
         }
       }
     });
-
+    this.props.actions.saveWall({
+      wallIndex: this.props.wallIndex,
+      tileList: this.props.tileList
+    })
   }
 
   render() {
     return <div className="edit-general-content">
       <h2>Size</h2>
-      <FormWall onSubmit={this.handleSubmit}
+      <FormWall
+          onSubmit={this.handleSubmit}
           wallIndex={this.props.wallIndex} />
     </div>
   }
@@ -37,7 +41,7 @@ export default class TabEditWall extends Component {
 TabEditWall.propTypes = {
   // fields: PropTypes.object.isRequired,
   wallIndex:  PropTypes.number,
-  action:     PropTypes.func
+  actions:    PropTypes.object
 }
 
 export default connect(undefined, {reset}) (TabEditWall)

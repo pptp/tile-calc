@@ -60,8 +60,9 @@ export default class Editor extends Component {
           <div className="edit-general">
             <Paper>
               <TabEditWall
+                  tileList={tileList}
                   wallIndex={wallIndex}
-                  action={this.props.actions.editWall}
+                  actions={this.props.actions}
               />
             </Paper>
           </div>
@@ -73,7 +74,9 @@ export default class Editor extends Component {
               <TabEditBars
                   bars={bars}
                   wallIndex={wallIndex}
+                  wall={wall}
                   actions={this.props.actions}
+                  tileList={tileList}
               />
             </Paper>
           </div>

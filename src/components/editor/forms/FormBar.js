@@ -25,6 +25,16 @@ const validate = values => {
 }
 
 class FormBar extends Component {
+  constructor(props) {
+    super(props)
+    this.reset = this.reset.bind(this)
+  }
+
+  reset() {
+    this.props.resetForm();
+    this.props.onReset();
+  }
+
   render() {
     const {
       fields: { name, w, h, x, y},
@@ -105,7 +115,7 @@ class FormBar extends Component {
           disabled={submitting}
           label="Cancel"
           secondary={true}
-          onClick={resetForm} />
+          onClick={this.reset} />
 
       <RaisedButton
           label="Change"
@@ -135,8 +145,9 @@ export default reduxForm({
 (state, component) => {
   const { wallIndex, barIndex } = component;
   const bar = state.walls
-    .get('list')
-    .get(wallIndex)
+    // .get('list')
+    // .get(wallIndex)
+    .get('editWall')
     .get('bar')
     .get(barIndex)
     .toJS();

@@ -26,6 +26,22 @@ export function setToEditTile(state, payload) {
   return state
 }
 
+export function saveWall(state, payload) {
+  const _wallIndex = (payload.wallIndex == undefined) ?
+    state.get('edit') : payload.wallIndex;
+
+
+  const wall = state.get('editWall')
+  if (!wall) {
+    return state
+  }
+
+  console.log("Wall:", wall.toJS());
+
+  return state.update('list', list => 
+    list.set(_wallIndex, wall));
+}
+
 // export function cancelEditWall(state, payload) {
 //   return state.update('edit', () => null)
 // }

@@ -80,11 +80,18 @@ export default reduxForm({
 },
 (state, component) => {
   const { wallIndex } = component;
+  /*
   const size = state.walls
     .get('list')
     .get(wallIndex)
     .get('size')
     .toJS();
+  */
+
+  const size = state.walls
+    .get('editWall')
+    .get('size')
+    .toJS()
 
   return {initialValues: size}
 }

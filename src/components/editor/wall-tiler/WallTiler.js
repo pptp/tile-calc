@@ -1,10 +1,12 @@
-require('../../../styles/wall-tiler.less')
+require('../../../styles/edit-form.less')
 
 import { List, Map } from 'immutable'
 
 import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
+
 import Wall from '../../common/Wall'
+import TileLeveler from './TileLeveler'
 
 import Slider from 'material-ui/Slider';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -13,16 +15,6 @@ import FlatButton from 'material-ui/FlatButton';
 export default class WallTiler extends Component {
   updateZoom(props = null) {
     const $wallContainer = $(ReactDOM.findDOMNode(this.refs.wallContainer))
-
-    /*
-    const wallList = (props || this.props).editWall
-
-    const zoom = wallList.count() ? wallList.reduce((zoom, wall) => {
-      const size = wall.get('size').toJS()
-      const currentZoom = Math.min($wall.width() / size.w, $wall.height() / size.h)
-      return zoom ? Math.min(zoom, currentZoom) : currentZoom
-    }, false) : 1;
-    */
 
     const wall = (props || this.props).wall
     const size = wall.get('size').toJS()
@@ -43,12 +35,36 @@ export default class WallTiler extends Component {
     this.updateZoom()
   }
 
+  updateSliderPos(props) {
+    const iTileMap = (props || this.props).wall.get('tileMap') || List.of()
+    const tileMap = iTileMap.toJS()
+
+    const start = tileMap.reduce((sum, tileItem) => 
+      sum + this.getTileById(tileItem.tileId).size.h * tileItem.count 
+    , 0)
+
+    // console.log("start:", start)
+
+    this.setState({
+      slider: Object.assign(this.state.slider, {
+        start: start
+      })
+    })
+  }
+
+  getTileById(id) {
+    const tileList = this.props.tileList.toJS()
+    return tileList.find(tile => tile.id == id)
+  }
+
   componentWillMount() {
-    this.updateDimensions.call(this);
+    // this.updateDimensions.call(this);
+    // this.updateSliderPos.call(this);
   }
   componentDidMount() {
     window.addEventListener("resize", this.updateDimensions.bind(this))
     this.updateZoom()
+    this.updateSliderPos.call(this);
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this))
@@ -56,14 +72,17 @@ export default class WallTiler extends Component {
   componentWillReceiveProps(nextProps) {
     // console.log("New Props", nextProps)
     this.updateZoom(nextProps)
+    this.updateSliderPos(nextProps)
   }
 
 
   setSliderPosition(event, pos) {
-    pos = Math.max(pos, this.state.slider.start)
+    // console.log("Slider Pos", pos)
+    // pos = Math.max(pos, this.state.slider.start)
 
     const tile = this.props.tile.toJS()
-    const count = Math.floor((pos - this.state.slider.start) / tile.size.h)
+    const count = Math.ceil(pos / tile.size.h)
+    // const count = Math.floor((pos - this.state.slider.start) / tile.size.h)
 
     this.setState({
       slider: Object.assign(this.state.slider, {
@@ -76,10 +95,17 @@ export default class WallTiler extends Component {
   handleAddTileToWall() {
     const action = this.props.actions.addTileToWall;
     action({
-      wallIndex: null, // just editable wall
       // wallIndex: this.props.wallIndex,
       tileId: this.props.tile.get('id'),
-      count: this.state.slider.count
+      count: this.state.slider.count,
+      tileList: this.props.tileList,
+    })
+    // debugger;
+    this.setState({
+      slider: Object.assign(this.state.slider, {
+        pos: 0,
+        count: 0
+      })
     })
   }
 
@@ -95,47 +121,90 @@ export default class WallTiler extends Component {
         start: 0,
         pos: 0,
         count: 0
-      }
+      },
     }
-
+    
     this.setSliderPosition = this.setSliderPosition.bind(this)
     this.handleAddTileToWall = this.handleAddTileToWall.bind(this)
+    this.doSaveWall = this.doSaveWall.bind(this)
+  }
+
+  doSaveWall() {
+    this.props.actions.saveWall({})
   }
 
   render() {
-    const { wall, tile } = this.props
-    const { zoom, slider } = this.state
+    const {
+      wall,
+      tile,
+      tileList,
+      wallIndex,
+      actions
+    } = this.props
+    const {
+      zoom,
+      slider,
+    } = this.state
 
     const count = this.state.slider.count
 
     const wallSize = wall.get('size').toJS()
     const tileSize = tile ? tile.get('size').toJS() : {w: 0, h: 0}
 
+    let sliderShow = true;
+    if (!tile) {
+      sliderShow = false
+    }
+    const freeSlideSpace = wallSize.h - slider.start
+    // if (freeSlideSpace < tileSize.h) { // :()
+    if (freeSlideSpace < 0) {
+      sliderShow = false
+    }
+    // style={editorStyle}
+    const wallHeight = wallSize.h * zoom;
+
     const sliderCss = {
-      paddingBottom: 24,
-      marginTop: -24,
-      display: tile ? '' : 'none'
+      // paddingBottom: 24 + slider.start * zoom,
+      // marginTop: -24,
+      paddingBottom: slider.start * zoom,
+      marginTop: -48,
+      display: sliderShow ? '' : 'none',
+      height: wallHeight
     }
 
     const applyDisabled = !count
-    // console.log("Slided count:", this.state.slider.count);
-    // console.log("Wall:", wall.toJS()  );
 
-    return <div className="wall-tiler">
-      <div className="wall-tiler-container">
+    
+    // console.log("slider:", slider)
+            // max={Math.max(0, wallSize.h - slider.start) }
+
+    return <div className="wall-tiler form-editor">
+      <div className="form-editor-container" style={{alignItems:'center'}}>
 
         <Slider axis="y"
             style={sliderCss}
-            min={slider.start}
-            max={wallSize.h}
+            min={0}
+            max={Math.max(tileSize.h, wallSize.h - slider.start)  }
             step={tileSize.h}
             onChange={this.setSliderPosition}
-            defaultValue={slider.start} />
+            value={slider.pos}
+            defaultValue={0} />
 
         <div className="wall-container"
             ref="wallContainer">
-          <Wall wall={wall} zoom={zoom} />
+          <Wall
+              wall={wall}
+              zoom={zoom}
+              tileList={tileList} />
         </div>
+
+        <TileLeveler actions={actions}
+            wall={wall}
+            zoom={zoom}
+            tileList={tileList}
+            wallIndex={wallIndex}
+            height={wallHeight}
+        />
 
         <FlatButton label="Apply" 
             disabled={applyDisabled}
@@ -145,7 +214,8 @@ export default class WallTiler extends Component {
 
       <div className="controls-container">
         <div className="controls">
-          <RaisedButton label="Save" 
+          <RaisedButton label="Save"
+              onClick={this.doSaveWall}
               primary={true} />
         </div>
       </div>

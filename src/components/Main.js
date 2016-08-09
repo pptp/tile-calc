@@ -4,6 +4,7 @@ import { List, Map } from 'immutable'
 
 import WallList from "../components/list/WallList"
 import Editor from "../components/editor/Editor"
+import Statistic from "./stat/Statistic"
 
 import Paper from 'material-ui/Paper';
 
@@ -33,7 +34,9 @@ export default class Main extends Component {
 
       // editStatement = '';
     } else {
-      editStatement = '';
+      editStatement = <Statistic 
+          wallList={wallList}
+          tileList={tileList} />;
     }
 
     return <div className="index">
@@ -41,6 +44,7 @@ export default class Main extends Component {
         <WallList
             actions={actions}
             wallList={wallList}
+            tileList={tileList}
             currentWallIndex={currentWallIndex}
         />
       </Paper>
